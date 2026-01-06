@@ -19,11 +19,11 @@ body {
     background: #020617;
     padding: 30px;
     width: 360px; /* основная ширина */
+    max-width: 100%; /* чтобы не вылазила на маленьких экранах */
     border-radius: 12px;
     text-align: center;
     box-shadow: 0 0 30px rgba(0,0,0,0.6);
-    max-width: 100%;
-    box-sizing: border-box;
+    box-sizing: border-box; /* паддинги учитываются внутри ширины */
 }
 
 /* Заголовок */
@@ -54,18 +54,20 @@ h1 {
     font-size: 16px;
 }
 
-/* Контейнер кнопок - чтобы стояли в ряд */
+/* Контейнер кнопок */
 .buttons {
     display: flex;
-    justify-content: center;
+    flex-direction: column; /* кнопки вертикально по умолчанию */
     gap: 10px; /* расстояние между кнопками */
-    flex-wrap: wrap; /* чтобы на маленьких экранах переносились */
+    width: 100%; /* чтобы контейнер был в пределах карточки */
+    box-sizing: border-box;
 }
 
 /* Кнопки */
 .btn {
-    display: inline-block;
-    padding: 12px 20px;
+    display: block;
+    width: 100%; /* кнопки занимают всю ширину контейнера */
+    padding: 12px 0;
     background: #38bdf8;
     color: #020617;
     text-decoration: none;
@@ -73,6 +75,7 @@ h1 {
     font-weight: bold;
     transition: background 0.3s;
     text-align: center;
+    box-sizing: border-box; /* паддинги учитываются внутри ширины */
 }
 
 /* Hover эффект */
@@ -103,17 +106,15 @@ h1 {
     }
 
     .text {
-        font-size: 13px; /* текст меньше */
+        font-size: 13px;
     }
 
     .buttons {
-        flex-direction: column; /* кнопки вертикально */
         gap: 10px;
     }
 
     .btn {
-        width: 100%; /* кнопки занимают всю ширину */
-        padding: 10px 16px;
+        padding: 10px 0;
         font-size: 14px;
     }
 }
