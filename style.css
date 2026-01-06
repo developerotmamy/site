@@ -1,12 +1,14 @@
 /* ========================== */
 /* ОСНОВНОЙ СТИЛЬ САЙТА */
 /* ========================== */
+* {
+    box-sizing: border-box;
+}
 
-/* Фон страницы и центрирование */
 body {
     margin: 0;
     min-height: 100vh;
-    background: #0f172a; /* темно-синий фон */
+    background: #0f172a;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,40 +16,34 @@ body {
     color: white;
 }
 
-/* Карточка визитки */
 .card {
     background: #020617;
     padding: 30px;
-    width: 360px; /* основная ширина */
-    max-width: 100%; /* чтобы не вылазила на маленьких экранах */
+    width: 400px; /* увеличили ширину карточки на ПК */
+    max-width: 100%;
     border-radius: 12px;
     text-align: center;
     box-shadow: 0 0 30px rgba(0,0,0,0.6);
-    box-sizing: border-box; /* паддинги учитываются внутри ширины */
 }
 
-/* Заголовок */
 h1 {
     margin-top: 0;
     color: #38bdf8;
     font-size: 28px;
 }
 
-/* Подзаголовок */
 .subtitle {
     color: #94a3b8;
     margin-bottom: 20px;
     font-size: 16px;
 }
 
-/* Основной текст */
 .text {
     font-size: 14px;
     line-height: 1.5;
     margin-bottom: 25px;
 }
 
-/* Надпись перед кнопками */
 .contact-title {
     font-weight: bold;
     margin-bottom: 10px;
@@ -57,43 +53,40 @@ h1 {
 /* Контейнер кнопок */
 .buttons {
     display: flex;
-    flex-direction: column; /* кнопки вертикально по умолчанию */
-    gap: 10px; /* расстояние между кнопками */
-    width: 100%; /* чтобы контейнер был в пределах карточки */
-    box-sizing: border-box;
+    flex-direction: column; 
+    gap: 10px;
+    padding: 0 10px; /* внутренний отступ */
 }
 
 /* Кнопки */
 .btn {
     display: block;
-    width: 100%; /* кнопки занимают всю ширину контейнера */
-    padding: 12px 0;
+    width: 100%;
+    padding: 16px 0; /* увеличили для ПК */
     background: #38bdf8;
     color: #020617;
     text-decoration: none;
     border-radius: 8px;
     font-weight: bold;
+    font-size: 16px;
     transition: background 0.3s;
     text-align: center;
-    box-sizing: border-box; /* паддинги учитываются внутри ширины */
 }
 
-/* Hover эффект */
 .btn:hover {
-    background: #0b93d6; /* чуть темнее при наведении */
+    background: #0b93d6;
 }
 
 /* ========================== */
 /* АДАПТИВ ДЛЯ ТЕЛЕФОНОВ */
 /* ========================== */
 @media (max-width: 600px) {
-
     body {
-        padding: 10px; /* чтобы карточка не упиралась в края */
+        padding: 10px;
     }
 
     .card {
-        width: 90%; /* карточка почти весь экран */
+        width: 100%;
         padding: 20px;
     }
 
@@ -110,11 +103,11 @@ h1 {
     }
 
     .buttons {
-        gap: 10px;
+        padding: 0 5px; /* меньше паддинга на телефоне */
     }
 
     .btn {
-        padding: 10px 0;
+        padding: 12px 0; /* чуть меньше для мобильного */
         font-size: 14px;
     }
 }
