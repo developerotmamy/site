@@ -1,100 +1,98 @@
-/* ========================== */
-/* ОСНОВНОЙ СТИЛЬ САЙТА */
-/* ========================== */
+/* ===== Основной стиль ===== */
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    margin: 0;
-    min-height: 100vh;
-    background: #0f172a;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: Arial, sans-serif;
-    color: white;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #fff;
 }
 
 .card {
     background: #020617;
-    padding: 30px;
-    width: 400px; /* увеличили ширину карточки на ПК */
-    max-width: 100%;
-    border-radius: 12px;
+    padding: 40px;
+    width: 380px;
+    max-width: 95%;
+    border-radius: 15px;
     text-align: center;
-    box-shadow: 0 0 30px rgba(0,0,0,0.6);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7);
 }
 
 h1 {
-    margin-top: 0;
+    font-size: 30px;
     color: #38bdf8;
-    font-size: 28px;
+    margin-bottom: 10px;
 }
 
 .subtitle {
-    color: #94a3b8;
+    color: #a0aec0;
     margin-bottom: 20px;
     font-size: 16px;
 }
 
 .text {
     font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 25px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    opacity: 0;
+    animation: fadeIn 1s forwards 0.5s;
 }
 
-.contact-title {
-    font-weight: bold;
-    margin-bottom: 10px;
-    font-size: 16px;
-}
-
-/* Контейнер кнопок */
+/* ===== Кнопки ===== */
 .buttons {
     display: flex;
-    flex-direction: column; 
-    gap: 10px;
-    padding: 0 10px; /* внутренний отступ */
+    flex-direction: column;
+    gap: 12px;
 }
 
-/* Кнопки */
 .btn {
-    display: block;
-    width: 100%;
-    padding: 16px 0; /* увеличили для ПК */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 0;
     background: #38bdf8;
     color: #020617;
-    text-decoration: none;
-    border-radius: 8px;
     font-weight: bold;
     font-size: 16px;
-    transition: background 0.3s;
-    text-align: center;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .btn:hover {
-    background: #0b93d6;
+    background: #0a7bb5;
+    transform: scale(1.05);
 }
 
-/* ========================== */
-/* АДАПТИВ ДЛЯ ТЕЛЕФОНОВ */
-/* ========================== */
-@media (max-width: 600px) {
-    body {
-        padding: 10px;
-    }
+i {
+    font-size: 18px;
+}
 
+/* ===== Адаптив ===== */
+@media (max-width: 600px) {
     .card {
-        width: 100%;
-        padding: 20px;
+        padding: 25px;
     }
 
     h1 {
-        font-size: 22px;
+        font-size: 24px;
     }
 
-    .subtitle, .contact-title {
+    .subtitle {
         font-size: 14px;
     }
 
@@ -102,12 +100,17 @@ h1 {
         font-size: 13px;
     }
 
-    .buttons {
-        padding: 0 5px; /* меньше паддинга на телефоне */
+    .btn {
+        font-size: 14px;
+        padding: 12px 0;
     }
 
-    .btn {
-        padding: 12px 0; /* чуть меньше для мобильного */
-        font-size: 14px;
+    i {
+        font-size: 16px;
     }
+}
+
+/* ===== Анимация текста ===== */
+@keyframes fadeIn {
+    to { opacity: 1; }
 }
