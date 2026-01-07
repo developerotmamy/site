@@ -98,6 +98,8 @@ h1 {
     opacity: 0;
     transform: translateY(60px);
     transition: 0.9s ease;
+    position: relative;
+    overflow: hidden;
 }
 
 .section.is-visible {
@@ -133,16 +135,19 @@ h2 {
 .case-item,
 .faq-item,
 blockquote {
-    background: rgba(255,255,255,0.05);
+    background: linear-gradient(145deg, rgba(10,14,20,0.85), rgba(20,26,35,0.95));
+    backdrop-filter: blur(8px);
     padding: 25px;
-    border-radius: 10px;
-    border: 1px solid rgba(88,166,255,0.18);
+    border-radius: 12px;
+    border: 1px solid rgba(88,166,255,0.2);
     text-align: center;
     transform-style: preserve-3d;
     transition: 
         transform 0.45s cubic-bezier(0.25,0.8,0.25,1),
         box-shadow 0.45s,
-        border-color 0.45s;
+        border-color 0.45s,
+        background 0.45s;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     opacity: 0;
     transform: translateY(40px);
 }
@@ -155,12 +160,13 @@ blockquote {
 
 .animated-card:hover {
     transform:
-        translateY(-20px)
-        scale(1.07)
-        rotateX(6deg)
-        rotateY(-4deg);
-    box-shadow: 0 25px 50px rgba(88,166,255,0.55);
+        translateY(-18px)
+        scale(1.06)
+        rotateX(8deg)
+        rotateY(-6deg);
+    box-shadow: 0 25px 50px rgba(88,166,255,0.45);
     border-color: #58a6ff;
+    background: linear-gradient(145deg, rgba(10,14,20,0.95), rgba(25,35,50,0.95));
 }
 
 /* МИКРО-ДВИЖЕНИЕ ТЕКСТА */
@@ -191,7 +197,6 @@ blockquote {
     gap: 12px;
 }
 
-/* ===== НАВЫКИ (УМЕНЬШЕННАЯ АНИМАЦИЯ) ===== */
 .skill-tag {
     padding: 8px 16px;
     border-radius: 6px;
@@ -202,8 +207,8 @@ blockquote {
 }
 
 .skill-tag:hover {
-    transform: scale(1.08) translateY(-3px); /* меньшее увеличение и подъем */
-    box-shadow: 0 6px 12px rgba(88,166,255,0.35); /* лёгкий блур/тень */
+    transform: scale(1.08) translateY(-3px);
+    box-shadow: 0 6px 12px rgba(88,166,255,0.35);
 }
 
 /* ===== КНОПКИ ===== */
@@ -225,11 +230,20 @@ blockquote {
     transition: all 0.35s cubic-bezier(0.25,0.8,0.25,1);
     position: relative;
     overflow: hidden;
+    will-change: transform;
 }
 
 .btn:hover {
-    transform: translateY(-8px) scale(1.06);
-    box-shadow: 0 15px 35px rgba(88,166,255,0.55);
+    transform: translateY(-6px) scale(1.05);
+    box-shadow: 0 12px 28px rgba(88,166,255,0.5);
+}
+
+.btn i {
+    transition: transform 0.3s ease;
+}
+
+.btn:hover i {
+    transform: translateX(4px);
 }
 
 .btn-primary {
@@ -269,80 +283,6 @@ footer {
     font-size: 0.85em;
 }
 
-/* ===== АДАПТИВ ===== */
-@media (max-width: 900px) {
-    .faq-grid { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 600px) {
-    h1 { font-size: 2.3em; }
-    h2 { font-size: 1.5em; }
-    .section { padding: 30px 20px; }
-    .buttons { flex-direction: column; }
-}
-/* ===== УСИЛЕННЫЕ АНИМАЦИИ КАРТОЧЕК ===== */
-
-.animated-card {
-    transform-style: preserve-3d;
-}
-
-.animated-card:hover {
-    transform:
-        translateY(-18px)
-        scale(1.06)
-        rotateX(8deg)
-        rotateY(-6deg);
-}
-
-/* "Отклик" карточки */
-.animated-card::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(
-        circle at top,
-        rgba(88,166,255,0.25),
-        transparent 60%
-    );
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    pointer-events: none;
-}
-
-.animated-card:hover::after {
-    opacity: 1;
-}
-/* ===== ЖИВЫЕ ОПИСАНИЯ ===== */
-
-.section p,
-.section h3,
-.section h4,
-.section blockquote {
-    transition: transform 0.35s ease, opacity 0.35s ease;
-}
-
-.animated-card:hover p,
-.animated-card:hover h3,
-.animated-card:hover h4 {
-    transform: translateY(-5px);
-}
-/* ===== МИКРОАНИМАЦИЯ КНОПОК ===== */
-
-.btn {
-    will-change: transform;
-}
-
-.btn:hover {
-    transform: translateY(-8px) scale(1.05);
-}
-
-.btn i {
-    transition: transform 0.3s ease;
-}
-
-.btn:hover i {
-    transform: translateX(4px);
-}
 /* ===== СОЦ.СЕТИ КНОПКИ ===== */
 .social-buttons .btn {
     background: rgba(88,166,255,0.15);
@@ -353,204 +293,27 @@ footer {
 .social-buttons .btn:hover {
     background: #58a6ff;
     color: #0d1117;
-    transform: translateY(-6px) scale(1.05);
-    box-shadow: 0 12px 28px rgba(88,166,255,0.5);
 }
 
-.social-buttons .btn i {
-    transition: transform 0.3s ease;
+/* ===== АДАПТИВ ===== */
+@media (max-width: 1200px) {
+    h1 { font-size: 3em; }
+    h2 { font-size: 1.8em; }
 }
 
-.social-buttons .btn:hover i {
-    transform: translateX(4px);
-}
-/* ===== УКРАШЕННЫЕ ДОСКИ ===== */
-.animated-card,
-.service-item,
-.workflow-step,
-.case-item,
-.faq-item,
-blockquote {
-    background: linear-gradient(145deg, rgba(10,14,20,0.85), rgba(20,26,35,0.95));
-    backdrop-filter: blur(8px); /* добавляем лёгкий blur для глубины */
-    padding: 25px;
-    border-radius: 12px;
-    border: 1px solid rgba(88,166,255,0.2);
-    text-align: center;
-    transform-style: preserve-3d;
-    transition: 
-        transform 0.45s cubic-bezier(0.25,0.8,0.25,1),
-        box-shadow 0.45s,
-        border-color 0.45s,
-        background 0.45s;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+@media (max-width: 900px) {
+    .faq-grid { grid-template-columns: 1fr; }
+    .service-grid { grid-template-columns: 1fr; }
+    .workflow-grid { grid-template-columns: 1fr; }
+    .case-grid { grid-template-columns: 1fr; }
+    .testimonial-grid { grid-template-columns: 1fr; }
 }
 
-/* hover эффекты карточек */
-.animated-card:hover {
-    transform:
-        translateY(-18px)
-        scale(1.06)
-        rotateX(8deg)
-        rotateY(-6deg);
-    box-shadow: 0 25px 50px rgba(88,166,255,0.45);
-    border-color: #58a6ff;
-    background: linear-gradient(145deg, rgba(10,14,20,0.95), rgba(25,35,50,0.95));
-}
-
-/* ===== ЭФФЕКТ ЦИФРОВОЙ ПАУТИНЫ НА ФОН СЕКЦИЙ ===== */
-.section {
-    position: relative; /* чтобы псевдоэлемент был внутри */
-    overflow: hidden;
-}
-
-.section::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: repeating-radial-gradient(
-        circle at 50% 50%, 
-        rgba(88, 166, 255, 0.03), 
-        rgba(88, 166, 255, 0.03) 1px, 
-        transparent 2px, 
-        transparent 5px
-    );
-    pointer-events: none;
-    z-index: 0;
-    animation: digitalMesh 15s linear infinite;
-}
-
-@keyframes digitalMesh {
-    0% { transform: translate(0, 0) rotate(0deg); }
-    50% { transform: translate(20px, 10px) rotate(2deg); }
-    100% { transform: translate(0, 0) rotate(0deg); }
-}
-
-/* Чтобы контент секции оставался поверх паутины */
-.section > * {
-    position: relative;
-    z-index: 1;
-}
-/* ===== ЦИФРОВАЯ ПАУТИНА НА ФОН СЕКЦИЙ ===== */
-.section {
-    position: relative;
-    overflow: hidden;
-}
-
-.section::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background: transparent;
-    /* нарисуем линии через CSS градиенты */
-    background-image:
-        linear-gradient(0deg, rgba(88,166,255,0.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(88,166,255,0.08) 1px, transparent 1px);
-    background-size: 100px 100px; /* расстояние между линиями */
-    opacity: 0.4;
-    animation: digitalWeb 20s linear infinite;
-}
-
-@keyframes digitalWeb {
-    0%   { transform: translate(0, 0) rotate(0deg); }
-    25%  { transform: translate(10px, 5px) rotate(1deg); }
-    50%  { transform: translate(0, 10px) rotate(-1deg); }
-    75%  { transform: translate(-10px, 5px) rotate(0.5deg); }
-    100% { transform: translate(0, 0) rotate(0deg); }
-}
-
-/* Контент секции остаётся поверх паутины */
-.section > * {
-    position: relative;
-    z-index: 1;
-}
-/* ===== ЯРКАЯ ЦИФРОВАЯ ПАУТИНА НА ФОН СЕКЦИЙ ===== */
-.section {
-    position: relative;
-    overflow: hidden;
-}
-
-.section::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background: transparent;
-    /* линии сетки */
-    background-image:
-        linear-gradient(0deg, rgba(88,166,255,0.2) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(88,166,255,0.2) 1px, transparent 1px);
-    background-size: 80px 80px; /* расстояние между линиями */
-    opacity: 0.6;
-    animation: digitalWebMove 25s linear infinite;
-}
-
-/* имитация узлов цифровой сети через radial-gradient */
-.section::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background: radial-gradient(circle, rgba(88,166,255,0.3) 2px, transparent 2px) repeat;
-    background-size: 80px 80px;
-    opacity: 0.5;
-    animation: nodesMove 30s linear infinite alternate;
-}
-
-/* Анимация движения линий */
-@keyframes digitalWebMove {
-    0%   { transform: translate(0, 0) rotate(0deg); }
-    25%  { transform: translate(10px, 5px) rotate(0.5deg); }
-    50%  { transform: translate(0, 10px) rotate(-0.5deg); }
-    75%  { transform: translate(-10px, 5px) rotate(0.25deg); }
-    100% { transform: translate(0, 0) rotate(0deg); }
-}
-
-/* Анимация движения узлов */
-@keyframes nodesMove {
-    0%   { transform: translate(0, 0); }
-    25%  { transform: translate(5px, 5px); }
-    50%  { transform: translate(-5px, 10px); }
-    75%  { transform: translate(10px, -5px); }
-    100% { transform: translate(0, 0); }
-}
-
-/* Контент секции остаётся поверх паутины */
-.section > * {
-    position: relative;
-    z-index: 1;
-}
-
-/* ===== ДОСКИ/БЛОКИ УКРАШЕНИЕ ===== */
-.service-item,
-.workflow-step,
-.case-item,
-.faq-item,
-blockquote {
-    position: relative;
-    background: rgba(13,17,23,0.95);
-    border: 1px solid rgba(88,166,255,0.25);
-    box-shadow: 0 10px 30px rgba(88,166,255,0.15);
-    overflow: hidden;
-}
-
-/* маленькая цифровая сетка на самих досках */
-.service-item::before,
-.workflow-step::before,
-.case-item::before,
-.faq-item::before,
-blockquote::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image:
-        linear-gradient(0deg, rgba(88,166,255,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(88,166,255,0.05) 1px, transparent 1px);
-    background-size: 20px 20px;
-    opacity: 0.7;
-    pointer-events: none;
+@media (max-width: 600px) {
+    h1 { font-size: 2.3em; }
+    h2 { font-size: 1.5em; }
+    .section { padding: 30px 15px; }
+    .buttons { flex-direction: column; gap: 12px; }
+    .skill-tag { padding: 6px 12px; font-size: 0.85em; }
+    .service-item i { font-size: 2.3em; }
 }
