@@ -3,37 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тологон — Веб-разработчик</title>
+    <title>Тологон — Профессиональная Веб-Разработка</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 
-    <!-- Верхняя карточка -->
-    <div class="card">
-        <h1>Привет, я Тологон</h1>
-        <p class="subtitle">Начинающий веб-разработчик</p>
-        <p class="text">
-            Создаю простые, удобные и аккуратные сайты.  
-            Помогаю людям и проектам быть заметными в интернете.
-        </p>
+    <div id="three-container"></div>
 
-        <div class="buttons">
-            <a href="https://t.me/kazagaliev" target="_blank" class="btn"><i class="fab fa-telegram"></i> Telegram</a>
-            <a href="https://wa.me/228919711" target="_blank" class="btn"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-            <a href="https://www.instagram.com/devtologon/" target="_blank" class="btn"><i class="fab fa-instagram"></i> Instagram</a>
-        </div>
-    </div>
+    <main>
+        
+        <!-- HERO -->
+        <header class="hero-card">
+            <h1 class="fade-in">Тологон: Создание Высококлассных Веб-Решений</h1>
+            <p class="subtitle fade-in delay-05">Frontend-разработка и Оптимизация Производительности</p>
+            <p class="text fade-in delay-10">
+                Я превращаю сложные идеи в элегантные, быстрые и удобные для пользователя веб-интерфейсы. Начните свой проект сегодня и получите результат, который превзойдет Ваши ожидания.
+            </p>
+            <a href="#" data-scroll="#contact-block" class="btn btn-primary">Начать Проект</a>
+        </header>
+        
+        <!-- ОБО МНЕ -->
+        <section class="section about-me">
+            <h2>Обо Мне</h2>
+            <div class="about-content">
+                <p>Меня зовут Тологон. Я старший frontend-разработчик с 3-летним опытом в создании масштабируемых и высоконагруженных веб-приложений. Моя миссия — не просто писать код, но и гарантировать, что каждый проект достигает максимальной производительности и идеального пользовательского опыта.</p>
+                <div class="buttons">
+                    <a href="#" data-scroll="#achievements" class="btn btn-secondary animated-card">Мои Достижения</a>
+                    <a href="#" data-scroll="#skills" class="btn btn-secondary animated-card">Технологии</a>
+                </div>
+            </div>
+        </section>
 
-    <!-- Блок "О себе" -->
-    <div class="about">
-        <h2>О себе</h2>
-        <p>
-            Привет! Я Тологон, начинающий веб-разработчик.  
-            Мне нравится создавать аккуратные и удобные сайты.  
-            Люблю учиться новым технологиям и улучшать свои навыки каждый день.
-        </p>
-    </div>
+        <!-- УСЛУГИ -->
+        <section class="section services">
+            <h2>Мои Основные Услуги</h2>
+            <div class="grid service-grid">
+                <div class="service-item animated-card">
+                    <i class="fas fa-desktop"></i>
+                    <h3>Frontend-Разработка</h3>
+                    <p>Создание чистых, адаптивных и высокоскоростных интерфейсов на React/Vue. Фокус на UX/UI.</p>
+                </div>
+                <div class="service-item animated-card">
+                    <i class="fas fa-rocket"></i>
+                    <h3>Оптимизация (SEO/Speed)</h3>
+                    <p>Гарантия быстрой загрузки, A-класса по Lighthouse и высокого рейтинга в поисковых системах.</p>
+                </div>
+                <div class="service-item animated-card">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Адаптивный Дизайн</h3>
+                    <p>Идеальное отображение на всех устройствах и экранах.</p>
+                </div>
+                <div class="service-item animated-card">
+                    <i class="fas fa-database"></i>
+                    <h3>API Интеграция</h3>
+                    <p>Бесшовная и безопасная интеграция с любыми сторонними API и серверными системами.</p>
+                </div>
+            </div>
+        </section>
 
+        <!-- ПРОЦЕСС -->
+        <section class="section workflow">
+            <h2>Мой Прозрачный Процесс</h2>
+            <div class="grid workflow-grid">
+                <div class="workflow-step animated-card">
+                    <h3>1. Анализ и Планирование</h3>
+                    <p>Изучение целей и аудит конкурентов. Создание ТЗ.</p>
+                </div>
+                <div class="workflow-step animated-card">
+                    <h3>2. Дизайн и Прототип</h3>
+                    <p>Разработка чистого дизайна и интерактивный прототип.</p>
+                </div>
+                <div class="workflow-step animated-card">
+                    <h3>3. Разработка и Кодирование</h3>
+                    <p>Чистый, масштабируемый код. Постоянное тестирование.</p>
+                </div>
+                <div class="workflow-step animated-card">
+                    <h3>4. Запуск и Поддержка</h3>
+                    <p>Развертывание на домене и техническое сопровождение.</p>
+                </div>
+                <div class="workflow-step animated-card">
+                    <h3>5. Обучение и Передача</h3>
+                    <p>Подробные инструкции по управлению сайтом и передача всех исходников.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- КЕЙСЫ + ОТЗЫВЫ (БЛОК "ДОСТИЖЕНИЯ") -->
+        <section id="achievements" class="section cases">
+            <h2>Последние Кейсы</h2>
+            <div class="grid case-grid">
+                <div class="case-item animated-card">
+                    <h4>E-commerce Платформа (React)</h4>
+                    <p>Увеличение конверсии на 25% за счет оптимизации скорости загрузки каталога.</p>
+                </div>
+                <div class="case-item animated-card">
+                    <h4>Корпоративный Портал (Vue.js)</h4>
+                    <p>Внедрение интерактивных дашбордов для аналитики.</p>
+                </div>
+            </div>
+
+            <h2>Отзывы Клиентов</h2>
+            <div class="grid testimonial-grid">
+                <blockquote class="animated-card">
+                    <p>"Скорость работы Тологона поражает. Получили сайт, который превзошел все ожидания."</p>
+                    <footer>— Иван П., CEO</footer>
+                </blockquote>
+                <blockquote class="animated-card">
+                    <p>"Прозрачность процесса и внимание к деталям — вот что я ценю!"</p>
+                    <footer>— Мария К., Проект-менеджер</footer>
+                </blockquote>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="section faq">
+            <h2>Часто Задаваемые Вопросы (FAQ)</h2>
+            <div class="grid faq-grid">
+                <div class="faq-item animated-card">
+                    <h3><i class="fas fa-question-circle"></i> Сколько времени занимает разработка?</h3>
+                    <p>От 4 часов до 4 дней, в зависимости от сложности функционала. Сроки обсуждаются на этапе планирования.</p>
+                </div>
+                <div class="faq-item animated-card">
+                    <h3><i class="fas fa-code"></i> С какими технологиями Вы работаете?</h3>
+                    <p>Основной стек: JavaScript ES6+, React/Vue, чистый HTML/CSS (SCSS), Three.js для 3D.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- НАВЫКИ -->
+        <section id="skills" class="section skills">
+            <h2>Ключевые Технологии</h2>
+            <div class="skill-list">
+                <span class="skill-tag animated-tag">HTML5 / CSS3 (SCSS)</span>
+                <span class="skill-tag animated-tag">JavaScript ES6+</span>
+                <span class="skill-tag animated-tag">React / Vue.js</span>
+                <span class="skill-tag animated-tag">Node.js (Backend Basics)</span>
+                <span class="skill-tag animated-tag">Git / GitHub</span>
+                <span class="skill-tag animated-tag">Three.js / WebGL</span>
+            </div>
+        </section>
+
+        <!-- КОНТАКТ -->
+        <section id="contact-block" class="section final-contact">
+            <h2>Свяжитесь Со Мной</h2>
+            <p>Ваш следующий прорывной проект ждет. Давайте обсудим его прямо сейчас!</p>
+            <div class="buttons social-buttons">
+                <a href="https://t.me/kazagaliev" target="_blank" class="btn"><i class="fab fa-telegram"></i> Telegram</a>
+                <a href="https://www.instagram.com/devtologon/" target="_blank" class="btn"><i class="fab fa-instagram"></i> Instagram</a>
+                <a href="https://wa.me/228919711" target="_blank" class="btn"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                <a href="https://tiktok.com/tolog0n4ik" target="_blank" class="btn"><i class="fab fa-tiktok"></i> TikTok</a>
+                <a href="mailto:kazagalievtologon@gmail.com" class="btn btn-secondary">Email <i class="fas fa-paper-plane"></i></a>
+            </div>
+        </section>
+        
+    </main>
+
+    <footer>
+        <p>©️ 2026 Тологон. Профессиональная веб-разработка. Все права защищены.</p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
