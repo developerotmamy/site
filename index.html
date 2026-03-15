@@ -4,166 +4,680 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Тологон — Профессиональная Веб-Разработка</title>
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(180deg, #0d1117 0%, #161b22 100%);
+    color: #c9d1d9;
+    overflow-x: hidden;
+    position: relative;
+}
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at 30% 20%, rgba(88,166,255,0.18), transparent 40%),
+        radial-gradient(circle at 70% 80%, rgba(88,166,255,0.12), transparent 45%);
+    z-index: -2;
+    pointer-events: none;
+}
+
+
+
+/* ===== MOUSE PARTICLES ===== */
+#particle-canvas {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 1;
+}
+
+/* ===== THREE.JS ===== */
+#three-container {
+    position: fixed; inset: 0;
+    z-index: -1; opacity: 0.7; filter: brightness(0.75); pointer-events: none;
+}
+
+/* ===== NAVBAR ===== */
+#navbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 0 40px; height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(13,17,23,0); backdrop-filter: blur(0px);
+    border-bottom: 1px solid transparent;
+    transition: background 0.4s, backdrop-filter 0.4s, border-color 0.4s;
+}
+#navbar.scrolled {
+    background: rgba(13,17,23,0.9); backdrop-filter: blur(14px);
+    border-color: rgba(88,166,255,0.13);
+}
+.nav-logo {
+    font-size: 1.3em; font-weight: 700; color: #58a6ff;
+    letter-spacing: 2px; text-decoration: none;
+}
+.nav-links { display: flex; gap: 28px; list-style: none; }
+.nav-links a {
+    font-size: 0.8em; letter-spacing: 1px; text-transform: uppercase;
+    color: #8b949e; text-decoration: none; transition: color 0.2s; position: relative;
+}
+.nav-links a::after {
+    content: ''; position: absolute; bottom: -3px; left: 0; right: 0;
+    height: 1px; background: #58a6ff;
+    transform: scaleX(0); transition: transform 0.3s ease;
+}
+.nav-links a:hover, .nav-links a.active { color: #58a6ff; }
+.nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+
+/* ===== MAIN ===== */
+main { max-width: 1200px; margin: 0 auto; padding: 20px; position: relative; z-index: 2; }
+
+/* ===== HERO ===== */
+.hero-card {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center; padding: 100px 20px 80px;
+}
+.hero-parallax { will-change: transform; transition: transform 0.08s linear; }
+h1 {
+    font-size: 3.8em;
+    background: linear-gradient(90deg, #58a6ff, #8b949e, #58a6ff);
+    background-size: 200% auto;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    animation: textGlow 6s linear infinite; margin-bottom: 20px;
+}
+@keyframes textGlow { to { background-position: 200% center; } }
+.subtitle { font-size: 1.3em; letter-spacing: 1px; text-transform: uppercase; opacity: 0.85; margin-bottom: 30px; }
+.text { max-width: 700px; line-height: 1.8; margin: 0 auto 40px; }
+
+.fade-in { opacity: 0; transform: translateY(30px); animation: fadeInUp 0.9s ease forwards; }
+.delay-05 { animation-delay: 0.5s; }
+.delay-10 { animation-delay: 1.0s; }
+.delay-15 { animation-delay: 1.5s; }
+@keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+/* ===== СЕКЦИИ ===== */
+.section {
+    background: rgba(13,17,23,0.92);
+    padding: 50px; border-radius: 14px; margin: 60px 0;
+    border: 1px solid rgba(88,166,255,0.18);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+    backdrop-filter: blur(6px);
+    opacity: 0; transform: translateY(60px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+    position: relative; overflow: hidden;
+}
+.section.is-visible { opacity: 1; transform: translateY(0); }
+h2 {
+    font-size: 2em; margin-bottom: 30px;
+    border-bottom: 2px solid #58a6ff;
+    display: inline-block; padding-bottom: 10px;
+}
+
+/* ===== GRID ===== */
+.grid { display: grid; gap: 25px; perspective: 1200px; }
+.service-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+.workflow-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.case-grid, .testimonial-grid { grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); }
+.faq-grid { grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); }
+
+/* ===== КАРТОЧКИ ===== */
+.animated-card, .service-item, .workflow-step, .case-item, .faq-item, blockquote {
+    background: linear-gradient(145deg, rgba(10,14,20,0.85), rgba(20,26,35,0.95));
+    backdrop-filter: blur(8px); padding: 25px; border-radius: 12px;
+    border: 1px solid rgba(88,166,255,0.2); text-align: center;
+    transform-style: preserve-3d;
+    transition: transform 0.45s cubic-bezier(0.25,0.8,0.25,1), box-shadow 0.45s, border-color 0.45s, background 0.45s, opacity 0.6s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    opacity: 0; transform: translateY(40px);
+}
+.section.is-visible .animated-card, .section.is-visible blockquote { opacity: 1; transform: translateY(0); }
+.section.is-visible .animated-card:nth-child(1), .section.is-visible blockquote:nth-child(1) { transition-delay: 0.05s; }
+.section.is-visible .animated-card:nth-child(2), .section.is-visible blockquote:nth-child(2) { transition-delay: 0.15s; }
+.section.is-visible .animated-card:nth-child(3) { transition-delay: 0.25s; }
+.section.is-visible .animated-card:nth-child(4) { transition-delay: 0.35s; }
+.section.is-visible .animated-card:nth-child(5) { transition-delay: 0.45s; }
+.animated-card:hover {
+    transform: translateY(-18px) scale(1.06) rotateX(8deg) rotateY(-6deg);
+    box-shadow: 0 25px 50px rgba(88,166,255,0.45);
+    border-color: #58a6ff;
+    background: linear-gradient(145deg, rgba(10,14,20,0.95), rgba(25,35,50,0.95));
+}
+.animated-card h3, .animated-card h4, .animated-card p { transition: transform 0.3s ease; }
+.animated-card:hover h3, .animated-card:hover h4, .animated-card:hover p { transform: translateY(-4px); }
+.service-item i { font-size: 3em; color: #58a6ff; margin-bottom: 15px; }
+
+/* ===== СЧЁТЧИКИ ===== */
+.stats-row { display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; margin: 40px 0 0; }
+.stat-box { text-align: center; }
+.stat-num { font-size: 3em; font-weight: 700; color: #58a6ff; line-height: 1; display: block; }
+.stat-label { font-size: 0.8em; color: #8b949e; letter-spacing: 1px; text-transform: uppercase; margin-top: 6px; }
+
+/* ===== ПРОГРЕСС-БАРЫ ===== */
+.skill-bars { display: flex; flex-direction: column; gap: 20px; }
+.skill-bar-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9em; }
+.skill-bar-name { color: #c9d1d9; }
+.skill-bar-pct { color: #58a6ff; font-weight: 600; }
+.skill-bar-track { height: 6px; background: rgba(88,166,255,0.12); border-radius: 4px; overflow: hidden; }
+.skill-bar-fill {
+    height: 100%; width: 0%;
+    background: linear-gradient(90deg, #58a6ff, #8b949e);
+    border-radius: 4px;
+    transition: width 1.3s cubic-bezier(0.25,0.8,0.25,1);
+}
+.skill-tags-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; justify-content: center; }
+.skill-tag {
+    padding: 7px 15px; border-radius: 6px;
+    background: rgba(88,166,255,0.10); color: #58a6ff;
+    border: 1px solid rgba(88,166,255,0.3); font-size: 0.82em;
+    transition: transform 0.2s, box-shadow 0.2s, opacity 0.6s;
+    opacity: 0; transform: scale(0.85);
+}
+.section.is-visible .skill-tag { opacity: 1; transform: scale(1); }
+.section.is-visible .skill-tag:nth-child(1) { transition-delay: 0.05s; }
+.section.is-visible .skill-tag:nth-child(2) { transition-delay: 0.12s; }
+.section.is-visible .skill-tag:nth-child(3) { transition-delay: 0.19s; }
+.section.is-visible .skill-tag:nth-child(4) { transition-delay: 0.26s; }
+.section.is-visible .skill-tag:nth-child(5) { transition-delay: 0.33s; }
+.section.is-visible .skill-tag:nth-child(6) { transition-delay: 0.40s; }
+.skill-tag:hover { transform: scale(1.08) translateY(-3px); box-shadow: 0 6px 12px rgba(88,166,255,0.35); }
+
+/* ===== КНОПКИ ===== */
+.buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+.btn {
+    padding: 12px 26px; font-weight: 600; border-radius: 6px;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
+    transition: all 0.35s cubic-bezier(0.25,0.8,0.25,1);
+    position: relative; overflow: hidden; will-change: transform;
+    cursor: pointer; border: none; font-family: inherit; font-size: 1em;
+}
+.btn:hover { transform: translateY(-6px) scale(1.05); box-shadow: 0 12px 28px rgba(88,166,255,0.5); }
+.btn i { transition: transform 0.3s ease; }
+.btn:hover i { transform: translateX(4px); }
+.btn-primary { background: #58a6ff; color: #0d1117; }
+.btn-primary::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.45), transparent);
+    transform: translateX(-100%);
+}
+.btn-primary:hover::after { transform: translateX(100%); transition: transform 0.6s ease; }
+.btn-secondary { background: transparent; border: 1px solid #58a6ff; color: #58a6ff; }
+.social-buttons .btn { background: rgba(88,166,255,0.15); color: #58a6ff; border: 1px solid rgba(88,166,255,0.35); }
+.social-buttons .btn:hover { background: #58a6ff; color: #0d1117; }
+
+/* ===== ФОРМА ===== */
+.contact-form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 30px; }
+.form-full { grid-column: 1 / -1; }
+.form-input, .form-textarea {
+    width: 100%; background: rgba(88,166,255,0.05);
+    border: 1px solid rgba(88,166,255,0.2); border-radius: 8px;
+    padding: 14px 16px; color: #c9d1d9;
+    font-family: inherit; font-size: 0.9em; outline: none; resize: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.form-input:focus, .form-textarea:focus {
+    border-color: #58a6ff; box-shadow: 0 0 0 3px rgba(88,166,255,0.12);
+}
+.form-input::placeholder, .form-textarea::placeholder { color: #8b949e; }
+.form-textarea { height: 130px; }
+.form-status { text-align: center; margin-top: 12px; font-size: 0.9em; min-height: 24px; color: #58a6ff; }
+
+/* ===== SCROLL TO TOP ===== */
+#scrollTop {
+    position: fixed; bottom: 32px; right: 32px;
+    width: 46px; height: 46px;
+    background: rgba(88,166,255,0.15);
+    border: 1px solid rgba(88,166,255,0.4);
+    border-radius: 50%; color: #58a6ff; font-size: 1.1em;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; opacity: 0; transform: translateY(20px);
+    transition: opacity 0.35s, transform 0.35s, background 0.25s;
+    z-index: 200; text-decoration: none;
+}
+#scrollTop.visible { opacity: 1; transform: translateY(0); }
+#scrollTop:hover { background: #58a6ff; color: #0d1117; }
+
+/* ===== FOOTER ===== */
+footer { text-align: center; padding: 24px 0 40px; color: #8b949e; font-size: 0.85em; }
+
+/* ===== АДАПТИВ ===== */
+@media (max-width: 1200px) { h1 { font-size: 3em; } h2 { font-size: 1.8em; } }
+@media (max-width: 900px) {
+    #navbar { padding: 0 20px; }
+    .nav-links { gap: 16px; }
+    .faq-grid, .service-grid, .workflow-grid, .case-grid, .testimonial-grid { grid-template-columns: 1fr; }
+    .contact-form { grid-template-columns: 1fr; }
+}
+@media (max-width: 680px) {
+    .nav-links { display: none; }
+    h1 { font-size: 2.3em; } h2 { font-size: 1.5em; }
+    .section { padding: 30px 15px; }
+    .buttons { flex-direction: column; gap: 12px; }
+    .stats-row { gap: 30px; }
+    .stat-num { font-size: 2.2em; }
+    .service-item i { font-size: 2.3em; }
+}
+    </style>
 </head>
 <body>
 
-    <div id="three-container"></div>
+<!-- PRELOADER -->
 
-    <main>
-        
-        <!-- HERO -->
-        <header class="hero-card">
+
+<!-- MOUSE PARTICLES -->
+<canvas id="particle-canvas"></canvas>
+
+<!-- THREE.JS -->
+<div id="three-container"></div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+    <a href="#hero" class="nav-logo" data-scroll="#hero">T.</a>
+    <ul class="nav-links">
+        <li><a href="#about-section" data-scroll="#about-section">Обо мне</a></li>
+        <li><a href="#services-section" data-scroll="#services-section">Услуги</a></li>
+        <li><a href="#achievements" data-scroll="#achievements">Кейсы</a></li>
+        <li><a href="#skills" data-scroll="#skills">Навыки</a></li>
+        <li><a href="#contact-block" data-scroll="#contact-block">Контакт</a></li>
+    </ul>
+</nav>
+
+<main>
+
+    <!-- HERO -->
+    <header class="hero-card" id="hero">
+        <div class="hero-parallax">
             <h1 class="fade-in">Тологон: Создание Высококлассных Веб-Решений</h1>
             <p class="subtitle fade-in delay-05">Frontend-разработка и Оптимизация Производительности</p>
             <p class="text fade-in delay-10">
                 Я превращаю сложные идеи в элегантные, быстрые и удобные для пользователя веб-интерфейсы. Начните свой проект сегодня и получите результат, который превзойдет Ваши ожидания.
             </p>
-            <a href="#" data-scroll="#contact-block" class="btn btn-primary">Начать Проект</a>
-        </header>
-        
-        <!-- ОБО МНЕ -->
-        <section class="section about-me">
-            <h2>Обо Мне</h2>
-            <div class="about-content">
-                <p>Меня зовут Тологон. Я старший frontend-разработчик с 3-летним опытом в создании масштабируемых и высоконагруженных веб-приложений. Моя миссия — не просто писать код, но и гарантировать, что каждый проект достигает максимальной производительности и идеального пользовательского опыта.</p>
-                <div class="buttons">
-                    <a href="#" data-scroll="#achievements" class="btn btn-secondary animated-card">Мои Достижения</a>
-                    <a href="#" data-scroll="#skills" class="btn btn-secondary animated-card">Технологии</a>
+            <a href="#" data-scroll="#contact-block" class="btn btn-primary fade-in delay-15">Начать Проект</a>
+        </div>
+    </header>
+
+    <!-- ОБО МНЕ -->
+    <section id="about-section" class="section about-me">
+        <h2>Обо Мне</h2>
+        <div class="about-content">
+            <p>Меня зовут Тологон. Я старший frontend-разработчик с 3-летним опытом в создании масштабируемых и высоконагруженных веб-приложений. Моя миссия — не просто писать код, но и гарантировать, что каждый проект достигает максимальной производительности и идеального пользовательского опыта.</p>
+            <div class="stats-row">
+                <div class="stat-box">
+                    <span class="stat-num counter" data-target="3">0</span>
+                    <span class="stat-label">Года опыта</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-num counter" data-target="48">0</span>
+                    <span class="stat-label">Проектов</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-num counter" data-target="23">0</span>
+                    <span class="stat-label">Клиентов</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-num counter" data-target="100">0</span>
+                    <span class="stat-label">% довольных</span>
                 </div>
             </div>
-        </section>
-
-        <!-- УСЛУГИ -->
-        <section class="section services">
-            <h2>Мои Основные Услуги</h2>
-            <div class="grid service-grid">
-                <div class="service-item animated-card">
-                    <i class="fas fa-desktop"></i>
-                    <h3>Frontend-Разработка</h3>
-                    <p>Создание чистых, адаптивных и высокоскоростных интерфейсов на React/Vue. Фокус на UX/UI.</p>
-                </div>
-                <div class="service-item animated-card">
-                    <i class="fas fa-rocket"></i>
-                    <h3>Оптимизация (SEO/Speed)</h3>
-                    <p>Гарантия быстрой загрузки, A-класса по Lighthouse и высокого рейтинга в поисковых системах.</p>
-                </div>
-                <div class="service-item animated-card">
-                    <i class="fas fa-mobile-alt"></i>
-                    <h3>Адаптивный Дизайн</h3>
-                    <p>Идеальное отображение на всех устройствах и экранах.</p>
-                </div>
-                <div class="service-item animated-card">
-                    <i class="fas fa-database"></i>
-                    <h3>API Интеграция</h3>
-                    <p>Бесшовная и безопасная интеграция с любыми сторонними API и серверными системами.</p>
-                </div>
+            <br/><br/>
+            <div class="buttons">
+                <a href="#" data-scroll="#achievements" class="btn btn-secondary animated-card">Мои Достижения</a>
+                <a href="#" data-scroll="#skills" class="btn btn-secondary animated-card">Технологии</a>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- ПРОЦЕСС -->
-        <section class="section workflow">
-            <h2>Мой Прозрачный Процесс</h2>
-            <div class="grid workflow-grid">
-                <div class="workflow-step animated-card">
-                    <h3>1. Анализ и Планирование</h3>
-                    <p>Изучение целей и аудит конкурентов. Создание ТЗ.</p>
-                </div>
-                <div class="workflow-step animated-card">
-                    <h3>2. Дизайн и Прототип</h3>
-                    <p>Разработка чистого дизайна и интерактивный прототип.</p>
-                </div>
-                <div class="workflow-step animated-card">
-                    <h3>3. Разработка и Кодирование</h3>
-                    <p>Чистый, масштабируемый код. Постоянное тестирование.</p>
-                </div>
-                <div class="workflow-step animated-card">
-                    <h3>4. Запуск и Поддержка</h3>
-                    <p>Развертывание на домене и техническое сопровождение.</p>
-                </div>
-                <div class="workflow-step animated-card">
-                    <h3>5. Обучение и Передача</h3>
-                    <p>Подробные инструкции по управлению сайтом и передача всех исходников.</p>
-                </div>
+    <!-- УСЛУГИ -->
+    <section id="services-section" class="section services">
+        <h2>Мои Основные Услуги</h2>
+        <div class="grid service-grid">
+            <div class="service-item animated-card">
+                <i class="fas fa-desktop"></i>
+                <h3>Frontend-Разработка</h3>
+                <p>Создание чистых, адаптивных и высокоскоростных интерфейсов на React/Vue. Фокус на UX/UI.</p>
             </div>
-        </section>
-
-        <!-- КЕЙСЫ + ОТЗЫВЫ (БЛОК "ДОСТИЖЕНИЯ") -->
-        <section id="achievements" class="section cases">
-            <h2>Последние Кейсы</h2>
-            <div class="grid case-grid">
-                <div class="case-item animated-card">
-                    <h4>E-commerce Платформа (React)</h4>
-                    <p>Увеличение конверсии на 25% за счет оптимизации скорости загрузки каталога.</p>
-                </div>
-                <div class="case-item animated-card">
-                    <h4>Корпоративный Портал (Vue.js)</h4>
-                    <p>Внедрение интерактивных дашбордов для аналитики.</p>
-                </div>
+            <div class="service-item animated-card">
+                <i class="fas fa-rocket"></i>
+                <h3>Оптимизация (SEO/Speed)</h3>
+                <p>Гарантия быстрой загрузки, A-класса по Lighthouse и высокого рейтинга в поисковых системах.</p>
             </div>
-
-            <h2>Отзывы Клиентов</h2>
-            <div class="grid testimonial-grid">
-                <blockquote class="animated-card">
-                    <p>"Скорость работы Тологона поражает. Получили сайт, который превзошел все ожидания."</p>
-                    <footer>— Иван П., CEO</footer>
-                </blockquote>
-                <blockquote class="animated-card">
-                    <p>"Прозрачность процесса и внимание к деталям — вот что я ценю!"</p>
-                    <footer>— Мария К., Проект-менеджер</footer>
-                </blockquote>
+            <div class="service-item animated-card">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>Адаптивный Дизайн</h3>
+                <p>Идеальное отображение на всех устройствах и экранах.</p>
             </div>
-        </section>
-
-        <!-- FAQ -->
-        <section class="section faq">
-            <h2>Часто Задаваемые Вопросы (FAQ)</h2>
-            <div class="grid faq-grid">
-                <div class="faq-item animated-card">
-                    <h3><i class="fas fa-question-circle"></i> Сколько времени занимает разработка?</h3>
-                    <p>От 4 часов до 4 дней, в зависимости от сложности функционала. Сроки обсуждаются на этапе планирования.</p>
-                </div>
-                <div class="faq-item animated-card">
-                    <h3><i class="fas fa-code"></i> С какими технологиями Вы работаете?</h3>
-                    <p>Основной стек: JavaScript ES6+, React/Vue, чистый HTML/CSS (SCSS), Three.js для 3D.</p>
-                </div>
+            <div class="service-item animated-card">
+                <i class="fas fa-database"></i>
+                <h3>API Интеграция</h3>
+                <p>Бесшовная и безопасная интеграция с любыми сторонними API и серверными системами.</p>
             </div>
-        </section>
-
-        <!-- НАВЫКИ -->
-        <section id="skills" class="section skills">
-            <h2>Ключевые Технологии</h2>
-            <div class="skill-list">
-                <span class="skill-tag animated-tag">HTML5 / CSS3 (SCSS)</span>
-                <span class="skill-tag animated-tag">JavaScript ES6+</span>
-                <span class="skill-tag animated-tag">React / Vue.js</span>
-                <span class="skill-tag animated-tag">Node.js (Backend Basics)</span>
-                <span class="skill-tag animated-tag">Git / GitHub</span>
-                <span class="skill-tag animated-tag">Three.js / WebGL</span>
+            <div class="service-item animated-card">
+                <i class="fas fa-bullhorn"></i>
+                <h3>Реклама и Продвижение</h3>
+                <p>Настройка таргетированной рекламы в Google, Instagram и других платформах. Привлекаю реальных клиентов, а не просто клики.</p>
             </div>
-        </section>
-
-        <!-- КОНТАКТ -->
-        <section id="contact-block" class="section final-contact">
-            <h2>Свяжитесь Со Мной</h2>
-            <p>Ваш следующий прорывной проект ждет. Давайте обсудим его прямо сейчас!</p>
-            <div class="buttons social-buttons">
-                <a href="https://t.me/kazagaliev" target="_blank" class="btn"><i class="fab fa-telegram"></i> Telegram</a>
-                <a href="https://www.instagram.com/devtologon/" target="_blank" class="btn"><i class="fab fa-instagram"></i> Instagram</a>
-                <a href="https://wa.me/228919711" target="_blank" class="btn"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-                <a href="https://tiktok.com/tolog0n4ik" target="_blank" class="btn"><i class="fab fa-tiktok"></i> TikTok</a>
-                <a href="mailto:kazagalievtologon@gmail.com" class="btn btn-secondary">Email <i class="fas fa-paper-plane"></i></a>
+            <div class="service-item animated-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Аналитика и Рост</h3>
+                <p>Подключение Google Analytics, Яндекс.Метрики и настройка целей. Вижу где теряются клиенты — и исправляю это.</p>
             </div>
-        </section>
-        
-    </main>
+        </div>
+    </section>
 
-    <footer>
-        <p>©️ 2026 Тологон. Профессиональная веб-разработка. Все права защищены.</p>
-    </footer>
+    <!-- ПРОЦЕСС -->
+    <section class="section workflow">
+        <h2>Мой Прозрачный Процесс</h2>
+        <div class="grid workflow-grid">
+            <div class="workflow-step animated-card"><h3>1. Анализ и Планирование</h3><p>Изучение целей и аудит конкурентов. Создание ТЗ.</p></div>
+            <div class="workflow-step animated-card"><h3>2. Дизайн и Прототип</h3><p>Разработка чистого дизайна и интерактивный прототип.</p></div>
+            <div class="workflow-step animated-card"><h3>3. Разработка и Кодирование</h3><p>Чистый, масштабируемый код. Постоянное тестирование.</p></div>
+            <div class="workflow-step animated-card"><h3>4. Запуск и Поддержка</h3><p>Развертывание на домене и техническое сопровождение.</p></div>
+            <div class="workflow-step animated-card"><h3>5. Обучение и Передача</h3><p>Подробные инструкции по управлению сайтом и передача всех исходников.</p></div>
+        </div>
+    </section>
 
-    <script src="script.js"></script>
+    <!-- КЕЙСЫ + ОТЗЫВЫ -->
+    <section id="achievements" class="section cases">
+        <h2>Последние Кейсы</h2>
+        <div class="grid case-grid">
+            <div class="case-item animated-card">
+                <h4>E-commerce Платформа (React)</h4>
+                <p>Увеличение конверсии на 25% за счет оптимизации скорости загрузки каталога.</p>
+            </div>
+            <div class="case-item animated-card">
+                <h4>Корпоративный Портал (Vue.js)</h4>
+                <p>Внедрение интерактивных дашбордов для аналитики.</p>
+            </div>
+        </div>
+        <br/>
+        <h2>Отзывы Клиентов</h2>
+        <div class="grid testimonial-grid">
+            <blockquote class="animated-card">
+                <p>"Скорость работы Тологона поражает. Получили сайт, который превзошел все ожидания."</p>
+                <footer>— Иван П., CEO</footer>
+            </blockquote>
+            <blockquote class="animated-card">
+                <p>"Прозрачность процесса и внимание к деталям — вот что я ценю!"</p>
+                <footer>— Мария К., Проект-менеджер</footer>
+            </blockquote>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section faq">
+        <h2>Часто Задаваемые Вопросы</h2>
+        <div class="grid faq-grid">
+            <div class="faq-item animated-card">
+                <h3><i class="fas fa-question-circle"></i> Сколько времени занимает разработка?</h3>
+                <p>От 4 часов до 4 дней, в зависимости от сложности функционала. Сроки обсуждаются на этапе планирования.</p>
+            </div>
+            <div class="faq-item animated-card">
+                <h3><i class="fas fa-code"></i> С какими технологиями Вы работаете?</h3>
+                <p>Основной стек: JavaScript ES6+, React/Vue, чистый HTML/CSS (SCSS), Three.js для 3D.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- НАВЫКИ -->
+    <section id="skills" class="section skills">
+        <h2>Ключевые Технологии</h2>
+        <div class="skill-bars">
+            <div class="skill-bar-item">
+                <div class="skill-bar-header"><span class="skill-bar-name">HTML5 / CSS3 (SCSS)</span><span class="skill-bar-pct">95%</span></div>
+                <div class="skill-bar-track"><div class="skill-bar-fill" data-width="95"></div></div>
+            </div>
+            <div class="skill-bar-item">
+                <div class="skill-bar-header"><span class="skill-bar-name">JavaScript ES6+</span><span class="skill-bar-pct">90%</span></div>
+                <div class="skill-bar-track"><div class="skill-bar-fill" data-width="90"></div></div>
+            </div>
+            <div class="skill-bar-item">
+                <div class="skill-bar-header"><span class="skill-bar-name">React / Vue.js</span><span class="skill-bar-pct">85%</span></div>
+                <div class="skill-bar-track"><div class="skill-bar-fill" data-width="85"></div></div>
+            </div>
+            <div class="skill-bar-item">
+                <div class="skill-bar-header"><span class="skill-bar-name">Three.js / WebGL</span><span class="skill-bar-pct">75%</span></div>
+                <div class="skill-bar-track"><div class="skill-bar-fill" data-width="75"></div></div>
+            </div>
+            <div class="skill-bar-item">
+                <div class="skill-bar-header"><span class="skill-bar-name">Node.js (Backend Basics)</span><span class="skill-bar-pct">65%</span></div>
+                <div class="skill-bar-track"><div class="skill-bar-fill" data-width="65"></div></div>
+            </div>
+            <div class="skill-bar-item">
+                <div class="skill-bar-header"><span class="skill-bar-name">Git / GitHub</span><span class="skill-bar-pct">88%</span></div>
+                <div class="skill-bar-track"><div class="skill-bar-fill" data-width="88"></div></div>
+            </div>
+        </div>
+        <div class="skill-tags-row">
+            <span class="skill-tag">HTML5 / CSS3</span>
+            <span class="skill-tag">JavaScript ES6+</span>
+            <span class="skill-tag">React / Vue.js</span>
+            <span class="skill-tag">Node.js</span>
+            <span class="skill-tag">Git / GitHub</span>
+            <span class="skill-tag">Three.js / WebGL</span>
+        </div>
+    </section>
+
+    <!-- КОНТАКТ -->
+    <section id="contact-block" class="section final-contact">
+        <h2>Свяжитесь Со Мной</h2>
+        <p>Ваш следующий прорывной проект ждет. Давайте обсудим его прямо сейчас!</p>
+        <br/>
+        <div class="buttons social-buttons">
+            <a href="https://t.me/kazagaliev" target="_blank" class="btn"><i class="fab fa-telegram"></i> Telegram</a>
+            <a href="https://www.instagram.com/tolog0n4ik/" target="_blank" class="btn"><i class="fab fa-instagram"></i> Instagram</a>
+            <a href="https://wa.me/228919711" target="_blank" class="btn"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            <a href="https://tiktok.com/tolog0n4ik" target="_blank" class="btn"><i class="fab fa-tiktok"></i> TikTok</a>
+        </div>
+        <form class="contact-form" id="contactForm" onsubmit="submitForm(event)">
+            <div class="form-full"><input class="form-input" type="text" id="nameInput" placeholder="Ваше имя *" required /></div>
+            <div class="form-full"><textarea class="form-textarea" id="msgInput" placeholder="Расскажите о вашем проекте..." required></textarea></div>
+            <div class="form-full" style="text-align:center;">
+                <button type="submit" class="btn btn-primary">Отправить <i class="fas fa-paper-plane"></i></button>
+                <div class="form-status" id="formStatus"></div>
+            </div>
+        </form>
+    </section>
+
+</main>
+
+<footer>
+    <p>©️ 2026 Тологон. Профессиональная веб-разработка. Все права защищены.</p>
+</footer>
+
+<a href="#" id="scrollTop" data-scroll="#hero"><i class="fas fa-chevron-up"></i></a>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// THREE.JS
+let scene, camera, renderer, starGeo, digitalCube;
+const threeContainer = document.getElementById('three-container');
+
+function initThree() {
+    if (!threeContainer || !window.WebGLRenderingContext) return;
+    scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x0d1117, 0.001);
+    camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 1, 2000);
+    camera.position.set(0, 0, 100);
+    renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setPixelRatio(devicePixelRatio);
+    renderer.setSize(innerWidth, innerHeight);
+    threeContainer.appendChild(renderer.domElement);
+    scene.add(new THREE.AmbientLight(0xffffff, 2));
+
+    starGeo = new THREE.BufferGeometry();
+    const pos = [];
+    for (let i = 0; i < 6000; i++) pos.push(Math.random()*800-400, Math.random()*800-400, Math.random()*800-400);
+    starGeo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.8 })));
+
+    digitalCube = new THREE.Mesh(
+        new THREE.BoxGeometry(40,40,40),
+        new THREE.MeshBasicMaterial({ color: 0x58a6ff, wireframe: true, transparent: true, opacity: 0.6 })
+    );
+    scene.add(digitalCube);
+
+    window.addEventListener('resize', () => {
+        camera.aspect = innerWidth/innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(innerWidth, innerHeight);
+    });
+    threeLoop();
+}
+
+function threeLoop() {
+    requestAnimationFrame(threeLoop);
+    const a = starGeo.attributes.position.array;
+    for (let i = 1; i < a.length; i += 3) { a[i] -= 0.3; if (a[i] < -400) a[i] = 400; }
+    starGeo.attributes.position.needsUpdate = true;
+    digitalCube.rotation.x += 0.004;
+    digitalCube.rotation.y += 0.006;
+    threeContainer.style.filter = `blur(${Math.min(scrollY/120,6)}px) brightness(0.75)`;
+    document.querySelectorAll('.section').forEach(s => {
+        if (s.getBoundingClientRect().top < innerHeight - 100) s.classList.add('is-visible');
+    });
+    renderer.render(scene, camera);
+}
+initThree();
+
+// MOUSE PARTICLES
+const pCanvas = document.getElementById('particle-canvas');
+const pCtx = pCanvas.getContext('2d');
+pCanvas.width = innerWidth; pCanvas.height = innerHeight;
+window.addEventListener('resize', () => { pCanvas.width = innerWidth; pCanvas.height = innerHeight; });
+const particles = [];
+document.addEventListener('mousemove', e => {
+    for (let i = 0; i < 3; i++) {
+        particles.push({
+            x: e.clientX, y: e.clientY,
+            vx: (Math.random()-0.5)*2,
+            vy: (Math.random()-0.5)*2 - 0.8,
+            life: 1, size: Math.random()*3+1
+        });
+    }
+});
+(function pLoop() {
+    requestAnimationFrame(pLoop);
+    pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+    for (let i = particles.length-1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx; p.y += p.vy; p.life -= 0.025;
+        if (p.life <= 0) { particles.splice(i,1); continue; }
+        pCtx.beginPath();
+        pCtx.arc(p.x, p.y, p.size * p.life, 0, Math.PI*2);
+        pCtx.fillStyle = `rgba(88,166,255,${p.life*0.6})`;
+        pCtx.fill();
+    }
+})();
+
+// NAVBAR + SCROLL TO TOP
+window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', scrollY > 40);
+    document.getElementById('scrollTop').classList.toggle('visible', scrollY > 400);
+    const ids = ['hero','about-section','services-section','achievements','skills','contact-block'];
+    let current = '';
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top < innerHeight * 0.4) current = id;
+    });
+    document.querySelectorAll('.nav-links a').forEach(a => {
+        a.classList.toggle('active', (a.dataset.scroll||'') === '#'+current);
+    });
+});
+
+// SMOOTH SCROLL
+document.querySelectorAll('[data-scroll]').forEach(btn => {
+    btn.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(btn.dataset.scroll);
+        if (!target) return;
+        const startY = pageYOffset;
+        const targetY = target.getBoundingClientRect().top + startY - 64;
+        const dist = targetY - startY;
+        let t0 = null;
+        const ease = t => t < 0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2;
+        (function run(now) {
+            if (!t0) t0 = now;
+            const p = Math.min((now-t0)/900, 1);
+            window.scrollTo(0, startY + dist*ease(p));
+            if (p < 1) requestAnimationFrame(run);
+        })(performance.now());
+    });
+});
+
+// PARALLAX HERO
+document.addEventListener('mousemove', e => {
+    const el = document.querySelector('.hero-parallax');
+    if (!el) return;
+    const dx = (e.clientX - innerWidth/2) / (innerWidth/2);
+    const dy = (e.clientY - innerHeight/2) / (innerHeight/2);
+    el.style.transform = `translate(${dx*12}px, ${dy*8}px)`;
+});
+
+// СЧЁТЧИКИ
+const counterObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target, target = +el.dataset.target, t0 = performance.now();
+        (function run(now) {
+            const p = Math.min((now-t0)/1800, 1);
+            const ease = p < 0.5 ? 2*p*p : -1+(4-2*p)*p;
+            el.textContent = Math.round(ease*target);
+            if (p < 1) requestAnimationFrame(run);
+        })(t0);
+        counterObs.unobserve(el);
+    });
+}, { threshold: 0.5 });
+document.querySelectorAll('.counter').forEach(el => counterObs.observe(el));
+
+// ПРОГРЕСС-БАРЫ
+const barObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        document.querySelectorAll('.skill-bar-fill').forEach(b => b.style.width = b.dataset.width + '%');
+        barObs.disconnect();
+    });
+}, { threshold: 0.3 });
+const skillsEl = document.getElementById('skills');
+if (skillsEl) barObs.observe(skillsEl);
+
+// ФОРМА
+async function submitForm(e) {
+    e.preventDefault();
+    const status = document.getElementById("formStatus");
+    const btn = e.target.querySelector("button[type=submit]");
+    const name = document.getElementById("nameInput").value;
+    const msg = document.getElementById("msgInput").value;
+    btn.textContent = "Отправка..."; btn.disabled = true;
+    const text = `📩 Новое сообщение с сайта!
+
+👤 Имя: ${name}
+
+💬 Сообщение:
+${msg}`;
+    try {
+        const res = await fetch(`https://api.telegram.org/bot8561496575:AAEctyL6bF2nsSFJhIKkvP8hpKaKBh8K4nM/sendMessage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ chat_id: "7239528532", text })
+        });
+        const data = await res.json();
+        if (data.ok) {
+            status.style.color = "#58a6ff";
+            status.textContent = "✅ Сообщение отправлено! Свяжусь в ближайшее время.";
+            e.target.reset();
+        } else {
+            status.style.color = "#ff6b6b";
+            status.textContent = "❌ Ошибка отправки. Напишите напрямую в Telegram.";
+        }
+    } catch(err) {
+        status.style.color = "#ff6b6b";
+        status.textContent = "❌ Ошибка сети. Напишите напрямую в Telegram.";
+    }
+    btn.innerHTML = "Отправить <i class=\"fas fa-paper-plane\"></i>";
+    btn.disabled = false;
+}
+</script>
 </body>
 </html>
